@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/vcr-osd-mono');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    @apply bg-[radial-gradient(ellipse_at_bottom,_#1b113f_0%,#0a0015_40%,#000_70%),radial-gradient(ellipse_at_top,_#ff1493_0%,transparent_50%),radial-gradient(ellipse_at_right,_#00ffff20_0%,transparent_50%)] bg-cover bg-fixed text-white antialiased;
+  }
+  canvas {
+    display: block;
+    height: 100vh !important;
+  }
+}
+
+@layer components {
+  .neon-glow {
+    filter: drop-shadow(0 0 5px #ff1493) drop-shadow(0 0 10px #ff1493);
+  }
+  .neon-text {
+    @apply bg-gradient-to-r from-pink-neon via-cyan-neon to-lime-neon bg-clip-text text-transparent font-orbitron font-bold tracking-wide;
+    filter: drop-shadow(0 0 5px currentColor);
+  }
+  .btn-neon {
+    @apply relative bg-galaxy-dark border-2 border-pink-neon text-pink-neon px-8 py-4 rounded-xl font-vcr font-bold uppercase tracking-widest overflow-hidden group;
+    transition: all 0.3s ease;
+  }
+  .btn-neon:hover {
+    @apply border-cyan-neon text-cyan-neon shadow-[0_0_20px_#00ffff];
+    transform: translateY(-2px);
+  }
+  .btn-neon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,20,147,0.4), transparent);
+    transition: left 0.5s;
+  }
+  .btn-neon:hover::before {
+    left: 100%;
+  }
+}
