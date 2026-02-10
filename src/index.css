@@ -29,7 +29,7 @@
     filter: drop-shadow(0 0 5px currentColor);
   }
   .btn-neon {
-    @apply relative bg-galaxy-dark border-2 border-pink-neon text-pink-neon px-8 py-4 rounded-xl font-vcr font-bold uppercase tracking-widest overflow-hidden group;
+    @apply relative bg-galaxy-dark border-2 border-pink-neon text-pink-neon px-8 py-4 rounded-xl font-vcr font-bold uppercase tracking-widest overflow-hidden;
     transition: all 0.3s ease;
   }
   .btn-neon:hover {
