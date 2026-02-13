@@ -14,41 +14,41 @@ import {
 
 const hashColor = (str) => {
   let hash = 0;
-  for (let i = 0; i &lt; str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash &lt;&lt; 5) - hash);
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
   return `hsl(${(hash % 360 + 360) % 360}, 70%, 50%)`;
 };
 
 function Avatar({ position, color }) {
   return (
-    &lt;group position={position}&gt;
-      &lt;mesh position={[0, 1, 0]}&gt;
-        &lt;sphereGeometry args={[0.25, 16, 16]} /&gt;
-        &lt;meshStandardMaterial color={color} /&gt;
-      &lt;/mesh&gt;
-      &lt;mesh&gt;
-        &lt;capsuleGeometry args={[0.25, 1.2, 4, 8]} /&gt;
-        &lt;meshStandardMaterial color={color} /&gt;
-      &lt;/mesh&gt;
-    &lt;/group&gt;
+    <group position={position}>
+      <mesh position={[0, 1, 0]}>
+        <sphereGeometry args={[0.25, 16, 16]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      <mesh>
+        <capsuleGeometry args={[0.25, 1.2, 4, 8]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+    </group>
   );
 }
 
 function Building({ position, size = [5, 5, 5] }) {
   return (
-    &lt;mesh position={position}&gt;
-      &lt;boxGeometry args={size} /&gt;
-      &lt;meshStandardMaterial color="#666" /&gt;
-    &lt;/mesh&gt;
+    <mesh position={position}>
+      <boxGeometry args={size} />
+      <meshStandardMaterial color="#666" />
+    </mesh>
   );
 }
 
 function Roads() {
   const ref = useRef();
-  useEffect(() =&gt; {
+  useEffect(() => {
     const positions = [];
-    for (let i = -5; i &lt;= 5; i++) {
+    for (let i = -5; i <= 5; i++) {
       const x = i * 10;
       positions.push(new THREE.Vector3(-50, 0.01, x), new THREE.Vector3(50, 0.01, x));
       positions.push(new THREE.Vector3(x, 0.01, -50), new THREE.Vector3(x, 0.01, 50));
@@ -56,19 +56,19 @@ function Roads() {
     ref.current.geometry.setFromPoints(positions);
   }, []);
   return (
-    &lt;lineSegments ref={ref}&gt;
-      &lt;bufferGeometry /&gt;
-      &lt;lineBasicMaterial color="#444" linewidth={8} /&gt;
-    &lt;/lineSegments&gt;
+    <lineSegments ref={ref}>
+      <bufferGeometry />
+      <lineBasicMaterial color="#444" linewidth={8} />
+    </lineSegments>
   );
 }
 
 function Portal({ position, color }) {
   return (
-    &lt;mesh position={position}&gt;
-      &lt;ringGeometry args={[1.5, 2.5, 16]} /&gt;
-      &lt;meshBasicMaterial color={color} emissive={color} emissiveIntensity={0.5} transparent opacity={0.9} /&gt;
-    &lt;/mesh&gt;
+    <mesh position={position}>
+      <ringGeometry args={[1.5, 2.5, 16]} />
+      <meshBasicMaterial color={color} emissive={color} emissiveIntensity={0.5} transparent opacity={0.9} />
+    </mesh>
   );
 }
 
@@ -127,19 +127,19 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
     },
   }[scene];
 
-  useEffect(() =&gt; {
-    const handleKey = (e, down) =&gt; {
+  useEffect(() => {
+    const handleKey = (e, down) => {
       keysRef.current[e.code] = down;
     };
-    document.addEventListener('keydown', (e) =&gt; handleKey(e, true));
-    document.addEventListener('keyup', (e) =&gt; handleKey(e, false));
-    return () =&gt; {
+    document.addEventListener('keydown', (e) => handleKey(e, true));
+    document.addEventListener('keyup', (e) => handleKey(e, false));
+    return () => {
       document.removeEventListener('keydown');
       document.removeEventListener('keyup');
     };
   }, []);
 
-  useFrame((state, delta) =&gt; {
+  useFrame((state, delta) => {
     if (!locked || !controlsRef.current) return;
 
     // Update direction vectors
@@ -172,9 +172,9 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
       const pHalf = new THREE.Vector3(playerHalfSize, eyeHeight / 2, playerHalfSize);
       const pMin = newPos.clone().sub(pHalf);
       const pMax = newPos.clone().add(pHalf);
-      if (pMax.x &gt; bMin.x &amp;&amp; pMin.x &lt; bMax.x &amp;&amp;
-          pMax.z &gt; bMin.z &amp;&amp; pMin.z &lt; bMax.z &amp;&amp;
-          pMax.y &gt; bMin.y &amp;&amp; pMin.y &lt; bMax.y) {
+      if (pMax.x > bMin.x && pMin.x < bMax.x &&
+          pMax.z > bMin.z && pMin.z < bMax.z &&
+          pMax.y > bMin.y && pMin.y < bMax.y) {
         collides = true;
         break;
       }
@@ -186,14 +186,14 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
     // Throttled position update
     const now = performance.now();
-    if (now - lastUpdateRef.current &gt; 100) {
+    if (now - lastUpdateRef.current > 100) {
       lastUpdateRef.current = now;
       updatePos({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
     }
 
     // Portal check
     for (const portal of worldData.portals) {
-      if (camera.position.distanceTo(portal.pos) &lt; 2.5) {
+      if (camera.position.distanceTo(portal.pos) < 2.5) {
         camera.position.copy(portal.enterPos);
         setScene(portal.targetScene);
         updatePos({ x: portal.enterPos.x, y: portal.enterPos.y, z: portal.enterPos.z }, portal.targetScene);
@@ -203,40 +203,40 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
   });
 
   return (
-    &lt;&gt;
-      &lt;PointerLockControls ref={controlsRef} /&gt;
-      &lt;color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} /&gt;
-      &lt;fog args={['black', 20, 100]} /&gt;
-      &lt;ambientLight intensity={0.4} /&gt;
-      &lt;directionalLight position={[10, 20, 10]} intensity={1} castShadow /&gt;
-      {scene === 'lobby' &amp;&amp; (
-        &lt;&gt;
-          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" /&gt;
-          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" /&gt;
-        &lt;/&gt;
+    <>
+      <PointerLockControls ref={controlsRef} />
+      <color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} />
+      <fog args={['black', 20, 100]} />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
+      {scene === 'lobby' && (
+        <>
+          <pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" />
+          <pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" />
+        </>
       )}
-      &lt;Stars radius={80} depth={50} count={5000} factor={4} /&gt;
-      &lt;Roads /&gt;
-      &lt;mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}&gt;
-        &lt;planeGeometry args={[100, 100]} /&gt;
-        &lt;meshLambertMaterial color={worldData.groundColor} /&gt;
-      &lt;/mesh&gt;
-      {worldData.buildings.map((b, i) =&gt; (
-        &lt;Building key={i} position={b.pos} size={b.size} /&gt;
+      <Stars radius={80} depth={50} count={5000} factor={4} />
+      <Roads />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
+        <planeGeometry args={[100, 100]} />
+        <meshLambertMaterial color={worldData.groundColor} />
+      </mesh>
+      {worldData.buildings.map((b, i) => (
+        <Building key={i} position={b.pos} size={b.size} />
       ))}
-      {worldData.portals.map((p, i) =&gt; (
-        &lt;Portal key={i} position={p.pos} color={p.color} /&gt;
+      {worldData.portals.map((p, i) => (
+        <Portal key={i} position={p.pos} color={p.color} />
       ))}
-      {Object.entries(users).map(([uId, data]) =&gt;
-        uId !== uid &amp;&amp; data?.scene === scene &amp;&amp; data.pos &amp;&amp; (
-          &lt;Avatar
+      {Object.entries(users).map(([uId, data]) =>
+        uId !== uid && data?.scene === scene && data.pos && (
+          <Avatar
             key={uId}
             position={[data.pos.x, data.pos.y || 0, data.pos.z]}
             color={hashColor(uId)}
-          /&gt;
+          />
         )
       )}
-    &lt;/&gt;
+    </>
   );
 }
 
@@ -246,7 +246,7 @@ export default function App() {
   const [users, setUsers] = useState({});
   const [uid, setUid] = useState(null);
 
-  const updatePos = useCallback((newPos, newScene) =&gt; {
+  const updatePos = useCallback((newPos, newScene) => {
     if (uid) {
       set(ref(db, `users/${uid}`), {
         pos: newPos,
@@ -255,14 +255,14 @@ export default function App() {
     }
   }, [uid, scene]);
 
-  useEffect(() =&gt; {
+  useEffect(() => {
     signInAnonymously(auth).catch(console.error);
 
-    const unsubAuth = onAuthStateChanged(auth, (user) =&gt; {
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.uid);
         const usersRef = ref(db, 'users');
-        const unsubUsers = onValue(usersRef, (snap) =&gt; {
+        const unsubUsers = onValue(usersRef, (snap) => {
           setUsers(snap.val() || {});
         });
         // Cleanup on unmount
@@ -270,29 +270,29 @@ export default function App() {
       }
     });
 
-    const handlePointerLock = () =&gt; {
+    const handlePointerLock = () => {
       setLocked(!!document.pointerLockElement);
     };
     document.addEventListener('pointerlockchange', handlePointerLock);
-    return () =&gt; {
+    return () => {
       document.removeEventListener('pointerlockchange', handlePointerLock);
       unsubAuth();
     };
   }, []);
 
   return (
-    &lt;div style={{ position: 'fixed', inset: 0 }}&gt;
-      &lt;Canvas camera={{ fov: 75, position: [0, 1.7, 0] }}&gt;
-        &lt;Scene
+    <div style={{ position: 'fixed', inset: 0 }}>
+      <Canvas camera={{ fov: 75, position: [0, 1.7, 0] }}>
+        <Scene
           scene={scene}
           users={users}
           uid={uid}
           locked={locked}
           updatePos={updatePos}
           setScene={setScene}
-        /&gt;
-      &lt;/Canvas&gt;
-      &lt;div style={{
+        />
+      </Canvas>
+      <div style={{
         position: 'absolute',
         top: 20,
         left: 20,
@@ -303,23 +303,23 @@ export default function App() {
         borderRadius: '8px',
         pointerEvents: 'none',
         zIndex: 100,
-      }}&gt;
+      }}>
         {!locked ? (
-          &lt;&gt;
-            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;Click to Play&lt;/div&gt;
-            &lt;div&gt;WASD: Move&lt;/div&gt;
-            &lt;div&gt;Mouse: Look&lt;/div&gt;
-            &lt;div&gt;Portals: Enter Lobby&lt;/div&gt;
-          &lt;/&gt;
+          <>
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>Click to Play</div>
+            <div>WASD: Move</div>
+            <div>Mouse: Look</div>
+            <div>Portals: Enter Lobby</div>
+          </>
         ) : (
-          &lt;&gt;
-            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;
+          <>
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>
               {scene.toUpperCase()}
-            &lt;/div&gt;
-            &lt;div&gt;ESC: Unlock&lt;/div&gt;
-          &lt;/&gt;
+            </div>
+            <div>ESC: Unlock</div>
+          </>
         )}
-      &lt;/div&gt;
-    &lt;/div&gt;
+      </div>
+    </div>
   );
 }

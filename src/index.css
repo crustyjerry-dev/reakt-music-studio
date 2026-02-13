@@ -1,9 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;display=swap');
+@import url('https://fonts.cdnfonts.com/css/vcr-osd-mono');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-@import url('https://fonts.cdnfonts.com/css/vcr-osd-mono');
 
 @layer base {
   html {
