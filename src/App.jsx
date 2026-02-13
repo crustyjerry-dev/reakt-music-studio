@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PointerLockControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
@@ -10,7 +10,7 @@ import {
   ref,
   onValue,
   set
-} from './firebase.js';
+} from './firebase.js';\n\nimport Chat from './components/Chat.jsx';\nimport Studio from './components/Studio.jsx';
 
 const hashColor = (str) => {
   let hash = 0;
@@ -242,7 +242,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
 export default function App() {
   const [locked, setLocked] = useState(false);
-  const [scene, setScene] = useState('world');
+  const [scene, setScene] = useState('world');\n  const [isStudio, setIsStudio] = useState(false);
   const [users, setUsers] = useState({});
   const [uid, setUid] = useState(null);
 

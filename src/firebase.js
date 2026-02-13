@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
-import { ref, set, onValue, update } from 'firebase/database';
+import { ref, set, onValue, update, push, query, orderByChild, limitToLast, serverTimestamp } from 'firebase/database';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -22,4 +22,4 @@ export const db = getDatabase(app);
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 
-export { ref, set, onValue, update, storageRef as sRef, uploadBytesResumable, getDownloadURL, onAuthStateChanged, signInAnonymously };
+export { ref, set, onValue, update, push, query, orderByChild, limitToLast, serverTimestamp, storageRef as sRef, uploadBytesResumable, getDownloadURL, onAuthStateChanged, signInAnonymously };
