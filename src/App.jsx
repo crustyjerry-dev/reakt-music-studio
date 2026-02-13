@@ -10,7 +10,9 @@ import {
   ref,
   onValue,
   set
-} from './firebase.js';\n\nimport Chat from './components/Chat.jsx';\nimport Studio from './components/Studio.jsx';
+} from './firebase.js';
+import Chat from './components/Chat.jsx';
+import Studio from './components/Studio.jsx';
 
 const hashColor = (str) => {
   let hash = 0;
@@ -242,7 +244,8 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
 export default function App() {
   const [locked, setLocked] = useState(false);
-  const [scene, setScene] = useState('world');\n  const [isStudio, setIsStudio] = useState(false);
+  const [scene, setScene] = useState('world');
+  const [isStudio, setIsStudio] = useState(false);
   const [users, setUsers] = useState({});
   const [uid, setUid] = useState(null);
 
