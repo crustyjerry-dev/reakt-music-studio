@@ -131,10 +131,11 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
   useEffect(() => {
     const handleKey = (e, down) => {
+      e.preventDefault();
       keysRef.current[e.code] = down;
     };
-    document.addEventListener('keydown', (e) => handleKey(e, true));
-    document.addEventListener('keyup', (e) => handleKey(e, false));
+    document.addEventListener('keydown', (e) => handleKey(e, true), { capture: true });
+    document.addEventListener('keyup', (e) => handleKey(e, false), { capture: true });
     return () => {
       document.removeEventListener('keydown');
       document.removeEventListener('keyup');
