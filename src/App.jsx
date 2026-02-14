@@ -323,6 +323,36 @@ export default function App() {
           </>
         )}
       </div>
+      {uid && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            left: 20,
+            color: 'white',
+            background: 'rgba(0,0,0,0.5)',
+            padding: '20px',
+            borderRadius: '8px',
+            zIndex: 100,
+          }}
+        >
+          <Chat uid={uid} />
+        </div>
+      )}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          color: 'white',
+          background: 'rgba(0,0,0,0.5)',
+          padding: '20px',
+          borderRadius: '8px',
+          zIndex: 100,
+        }}
+      >
+        <Studio isStudio={isStudio} setIsStudio={setIsStudio} />
+      </div>
     </div>
   );
 }
