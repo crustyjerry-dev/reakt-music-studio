@@ -131,6 +131,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
   useEffect(() => {
     const handleKey = (e, down) => {
+      console.log('handleKey', e.code, down);
       e.preventDefault();
       keysRef.current[e.code] = down;
     };
@@ -141,6 +142,12 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
       document.removeEventListener('keyup');
     };
   }, []);
+
+  useEffect(() => {
+    if (camera) {
+      camera.position.set(0, eyeHeight, 0);
+    }
+  }, [camera]);
 
   useFrame((state, delta) => {
     if (!locked || !controlsRef.current) return;
@@ -155,15 +162,14 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
     rightRef.current.normalize();
 
     const direction = new THREE.Vector3();
-    const moveSpeed = speed * delta;
-    if (keysRef.current.KeyW) direction.add(frontRef.current.clone().multiplyScalar(moveSpeed));
-    if (keysRef.current.KeyS) direction.sub(frontRef.current.clone().multiplyScalar(moveSpeed));
-    if (keysRef.current.KeyA) direction.sub(rightRef.current.clone().multiplyScalar(moveSpeed));
-    if (keysRef.current.KeyD) direction.add(rightRef.current.clone().multiplyScalar(moveSpeed));
-
-    if (direction.length() === 0) return;
-
-    const newPos = camera.position.clone().add(direction);
+    if (keysRef.current.KeyW || keysRef.current.ArrowUp) direction.add(frontRef.current);
+    if (keysRef.current.KeyS || keysRef.current.ArrowDown) direction.sub(frontRef.current);
+    if (keysRef.current.KeyA || keysRef.current.ArrowLeft) direction.sub(rightRef.current);
+    if (keysRef.current.KeyD || keysRef.current.ArrowRight) direction.add(rightRef.current);
+    if (direction.lengthSq() === 0) return;
+    direction.normalize();
+    const moveVec = direction.multiplyScalar(speed * delta);
+    const newPos = camera.position.clone().add(moveVec);
     newPos.y = eyeHeight;
 
     // Collision check
@@ -184,7 +190,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
     }
 
     if (!collides) {
-      camera.position.copy(newPos);
+      controlsRef.current.position.add(moveVec);
     }
 
     // Throttled position update
