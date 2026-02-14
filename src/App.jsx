@@ -285,7 +285,7 @@ export default function App() {
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-      <Canvas camera={{ fov: 75, position: [0, 1.7, 0] }}>
+      <Canvas onClick={() => document.body.requestPointerLock()} camera={{ fov: 75, position: [0, 1.7, 0] }}>
         <Scene
           scene={scene}
           users={users}
