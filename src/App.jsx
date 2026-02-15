@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { PointerLockControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import {
@@ -41,7 +41,7 @@ function Building({ position, size = [5, 5, 5] }) {
   return (
     <mesh position={position}>
       <boxGeometry args={size} />
-      <meshStandardMaterial color="#666" />
+      <meshStandardMaterial map={buildingTexture} />
     </mesh>
   );
 }
@@ -84,6 +84,18 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
   const speed = 15;
   const playerHalfSize = 0.4;
   const eyeHeight = 1.7;
+
+  const groundTexture = useLoader(THREE.TextureLoader, "https://threejs.org/examples/textures/terrain/grasslight-big.jpg");
+  const buildingTexture = useLoader(THREE.TextureLoader, "https://threejs.org/examples/textures/brick_diffuse.jpg");
+
+  useEffect(() => {
+    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+    groundTexture.repeat.set(10, 10);
+    groundTexture.needsUpdate = true;
+    buildingTexture.wrapS = buildingTexture.wrapT = THREE.RepeatWrapping;
+    buildingTexture.repeat.set(2, 2);
+    buildingTexture.needsUpdate = true;
+  }, [groundTexture, buildingTexture]);
 
   const worldData = {
     world: {
@@ -228,7 +240,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
       <Roads />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
         <planeGeometry args={[100, 100]} />
-        <meshLambertMaterial color={worldData.groundColor} />
+        <meshLambertMaterial map={groundTexture} />
       </mesh>
       {worldData.buildings.map((b, i) => (
         <Building key={i} position={b.pos} size={b.size} />
