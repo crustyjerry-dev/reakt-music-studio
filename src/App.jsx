@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PointerLockControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import {
@@ -41,7 +41,7 @@ function Building({ position, size = [5, 5, 5] }) {
   return (
     <mesh position={position}>
       <boxGeometry args={size} />
-      <meshStandardMaterial map={buildingTexture} />
+      <meshStandardMaterial color="#000" />
     </mesh>
   );
 }
@@ -84,18 +84,6 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
   const speed = 15;
   const playerHalfSize = 0.4;
   const eyeHeight = 1.7;
-
-  const groundTexture = useLoader(THREE.TextureLoader, "https://threejs.org/examples/textures/terrain/grasslight-big.jpg");
-  const buildingTexture = useLoader(THREE.TextureLoader, "https://threejs.org/examples/textures/brick_diffuse.jpg");
-
-  useEffect(() => {
-    groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-    groundTexture.repeat.set(10, 10);
-    groundTexture.needsUpdate = true;
-    buildingTexture.wrapS = buildingTexture.wrapT = THREE.RepeatWrapping;
-    buildingTexture.repeat.set(2, 2);
-    buildingTexture.needsUpdate = true;
-  }, [groundTexture, buildingTexture]);
 
   const worldData = {
     world: {
@@ -224,40 +212,40 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
   });
 
   return (
-    <>
-      <PointerLockControls ref={controlsRef} />
-      <color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} />
-      <fog args={['black', 20, 100]} />
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
-      {scene === 'lobby' && (
-        <>
-          <pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" />
-          <pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" />
-        </>
+    &lt;&gt;
+      &lt;PointerLockControls ref={controlsRef} /&gt;
+      &lt;color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} /&gt;
+      &lt;fog args={['black', 20, 100]} /&gt;
+      &lt;ambientLight intensity={0.4} /&gt;
+      &lt;directionalLight position={[10, 20, 10]} intensity={1} castShadow /&gt;
+      {scene === 'lobby' &amp;&amp; (
+        &lt;&gt;
+          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" /&gt;
+          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" /&gt;
+        &lt;/&gt;
       )}
-      <Stars radius={80} depth={50} count={5000} factor={4} />
-      <Roads />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-        <planeGeometry args={[100, 100]} />
-        <meshLambertMaterial map={groundTexture} />
-      </mesh>
-      {worldData.buildings.map((b, i) => (
-        <Building key={i} position={b.pos} size={b.size} />
+      &lt;Stars radius={80} depth={50} count={5000} factor={4} /&gt;
+      &lt;Roads /&gt;
+      &lt;mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}&gt;
+        &lt;planeGeometry args={[100, 100]} /&gt;
+        &lt;meshLambertMaterial color={worldData.groundColor} /&gt;
+      &lt;/mesh&gt;
+      {worldData.buildings.map((b, i) =&gt; (
+        &lt;Building key={i} position={b.pos} size={b.size} /&gt;
       ))}
-      {worldData.portals.map((p, i) => (
-        <Portal key={i} position={p.pos} color={p.color} />
+      {worldData.portals.map((p, i) =&gt; (
+        &lt;Portal key={i} position={p.pos} color={p.color} /&gt;
       ))}
-      {Object.entries(users).map(([uId, data]) =>
-        uId !== uid && data?.scene === scene && data.pos && (
-          <Avatar
+      {Object.entries(users).map(([uId, data]) =&gt;
+        uId !== uid &amp;&amp; data?.scene === scene &amp;&amp; data.pos &amp;&amp; (
+          &lt;Avatar
             key={uId}
             position={[data.pos.x, data.pos.y || 0, data.pos.z]}
             color={hashColor(uId)}
-          />
+          /&gt;
         )
       )}
-    </>
+    &lt;/&gt;
   );
 }
 
@@ -268,7 +256,7 @@ export default function App() {
   const [users, setUsers] = useState({});
   const [uid, setUid] = useState(null);
 
-  const updatePos = useCallback((newPos, newScene) => {
+  const updatePos = useCallback((newPos, newScene) =&gt; {
     if (uid) {
       set(ref(db, `users/${uid}`), {
         pos: newPos,
@@ -277,14 +265,14 @@ export default function App() {
     }
   }, [uid, scene]);
 
-  useEffect(() => {
+  useEffect(() =&gt; {
     signInAnonymously(auth).catch(console.error);
 
-    const unsubAuth = onAuthStateChanged(auth, (user) => {
+    const unsubAuth = onAuthStateChanged(auth, (user) =&gt; {
       if (user) {
         setUid(user.uid);
         const usersRef = ref(db, 'users');
-        const unsubUsers = onValue(usersRef, (snap) => {
+        const unsubUsers = onValue(usersRef, (snap) =&gt; {
           setUsers(snap.val() || {});
         });
         // Cleanup on unmount
@@ -292,29 +280,29 @@ export default function App() {
       }
     });
 
-    const handlePointerLock = () => {
+    const handlePointerLock = () =&gt; {
       setLocked(!!document.pointerLockElement);
     };
     document.addEventListener('pointerlockchange', handlePointerLock);
-    return () => {
+    return () =&gt; {
       document.removeEventListener('pointerlockchange', handlePointerLock);
       unsubAuth();
     };
   }, []);
 
   return (
-    <div style={{ position: 'fixed', inset: 0 }}>
-      <Canvas onClick={() => document.body.requestPointerLock()} camera={{ fov: 75, position: [0, 1.7, 0] }}>
-        <Scene
+    &lt;div style={{ position: 'fixed', inset: 0 }}&gt;
+      &lt;Canvas onClick={() =&gt; document.body.requestPointerLock()} camera={{ fov: 75, position: [0, 1.7, 0] }}&gt;
+        &lt;Scene
           scene={scene}
           users={users}
           uid={uid}
           locked={locked}
           updatePos={updatePos}
           setScene={setScene}
-        />
-      </Canvas>
-      <div style={{
+        /&gt;
+      &lt;/Canvas&gt;
+      &lt;div style={{
         position: 'absolute',
         top: 20,
         left: 20,
@@ -325,25 +313,25 @@ export default function App() {
         borderRadius: '8px',
         pointerEvents: 'none',
         zIndex: 100,
-      }}>
+      }}&gt;
         {!locked ? (
-          <>
-            <div style={{ fontSize: '24px', marginBottom: '10px' }}>Click to Play</div>
-            <div>WASD: Move</div>
-            <div>Mouse: Look</div>
-            <div>Portals: Enter Lobby</div>
-          </>
+          &lt;&gt;
+            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;Click to Play&lt;/div&gt;
+            &lt;div&gt;WASD: Move&lt;/div&gt;
+            &lt;div&gt;Mouse: Look&lt;/div&gt;
+            &lt;div&gt;Portals: Enter Lobby&lt;/div&gt;
+          &lt;/&gt;
         ) : (
-          <>
-            <div style={{ fontSize: '24px', marginBottom: '10px' }}>
+          &lt;&gt;
+            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;
               {scene.toUpperCase()}
-            </div>
-            <div>ESC: Unlock</div>
-          </>
+            &lt;/div&gt;
+            &lt;div&gt;ESC: Unlock&lt;/div&gt;
+          &lt;/&gt;
         )}
-      </div>
-      {uid && (
-        <div
+      &lt;/div&gt;
+      {uid &amp;&amp; (
+        &lt;div
           style={{
             position: 'absolute',
             bottom: 20,
@@ -354,11 +342,11 @@ export default function App() {
             borderRadius: '8px',
             zIndex: 100,
           }}
-        >
-          <Chat uid={uid} />
-        </div>
+        &gt;
+          &lt;Chat uid={uid} /&gt;
+        &lt;/div&gt;
       )}
-      <div
+      &lt;div
         style={{
           position: 'absolute',
           bottom: 20,
@@ -369,9 +357,9 @@ export default function App() {
           borderRadius: '8px',
           zIndex: 100,
         }}
-      >
-        <Studio isStudio={isStudio} setIsStudio={setIsStudio} />
-      </div>
-    </div>
+      &gt;
+        &lt;Studio isStudio={isStudio} setIsStudio={setIsStudio} /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
   );
 }
