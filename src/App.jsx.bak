@@ -212,17 +212,17 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
   });
 
   return (
-    <> 
+    &lt;&gt;
       &lt;PointerLockControls ref={controlsRef} /&gt;
       &lt;color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} /&gt;
       &lt;fog args={['black', 20, 100]} /&gt;
       &lt;ambientLight intensity={0.4} /&gt;
       &lt;directionalLight position={[10, 20, 10]} intensity={1} castShadow /&gt;
-      {scene === 'lobby' &amp;&amp;&amp;&amp; (
-        <> 
+      {scene === 'lobby' &amp;&amp; (
+        &lt;&gt;
           &lt;pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" /&gt;
           &lt;pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" /&gt;
-        </>
+        &lt;/&gt;
       )}
       &lt;Stars radius={80} depth={50} count={5000} factor={4} /&gt;
       &lt;Roads /&gt;
@@ -237,7 +237,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
         &lt;Portal key={i} position={p.pos} color={p.color} /&gt;
       ))}
       {Object.entries(users).map(([uId, data]) =&gt;
-        uId !== uid &amp;&amp;&amp;&amp; data?.scene === scene &amp;&amp;&amp;&amp; data.pos &amp;&amp;&amp;&amp; (
+        uId !== uid &amp;&amp; data?.scene === scene &amp;&amp; data.pos &amp;&amp; (
           &lt;Avatar
             key={uId}
             position={[data.pos.x, data.pos.y || 0, data.pos.z]}
@@ -245,7 +245,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
           /&gt;
         )
       )}
-    </>
+    &lt;/&gt;
   );
 }
 
@@ -315,22 +315,22 @@ export default function App() {
         zIndex: 100,
       }}&gt;
         {!locked ? (
-          <> 
+          &lt;&gt;
             &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;Click to Play&lt;/div&gt;
             &lt;div&gt;WASD: Move&lt;/div&gt;
             &lt;div&gt;Mouse: Look&lt;/div&gt;
             &lt;div&gt;Portals: Enter Lobby&lt;/div&gt;
-          </>
+          &lt;/&gt;
         ) : (
-          <> 
+          &lt;&gt;
             &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;
               {scene.toUpperCase()}
             &lt;/div&gt;
             &lt;div&gt;ESC: Unlock&lt;/div&gt;
-          </>
+          &lt;/&gt;
         )}
       &lt;/div&gt;
-      {uid &amp;&amp;&amp;&amp; (
+      {uid &amp;&amp; (
         &lt;div
           style={{
             position: 'absolute',
