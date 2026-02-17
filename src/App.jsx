@@ -218,7 +218,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
       <fog args={['black', 20, 100]} />
       <ambientLight intensity={0.4} />
       <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
-      {scene === 'lobby' &&&& (
+      {scene === 'lobby' &&&&&&& (
         <> 
           <pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" />
           <pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" />
@@ -237,7 +237,7 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
         <Portal key={i} position={p.pos} color={p.color} />
       ))}
       {Object.entries(users).map(([uId, data]) =>
-        uId !== uid &&&& data?.scene === scene &&&& data.pos &&&& (
+        uId !== uid &&&&&&& data?.scene === scene &&&&&&& data.pos &&&&&&& (
           <Avatar
             key={uId}
             position={[data.pos.x, data.pos.y || 0, data.pos.z]}
@@ -330,7 +330,7 @@ export default function App() {
           </>
         )}
       </div>
-      {uid &&&& (
+      {uid &&&&&&& (
         <div
           style={{
             position: 'absolute',
