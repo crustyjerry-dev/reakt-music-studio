@@ -213,36 +213,36 @@ function Scene({ scene, users, uid, locked, updatePos, setScene }) {
 
   return (
     <> 
-      &lt;PointerLockControls ref={controlsRef} /&gt;
-      &lt;color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} /&gt;
-      &lt;fog args={['black', 20, 100]} /&gt;
-      &lt;ambientLight intensity={0.4} /&gt;
-      &lt;directionalLight position={[10, 20, 10]} intensity={1} castShadow /&gt;
-      {scene === 'lobby' &amp;&amp;&amp;&amp; (
+      <PointerLockControls ref={controlsRef} />
+      <color attach="background" args={scene === 'world' ? ['#87CEEB'] : ['#111']} />
+      <fog args={['black', 20, 100]} />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
+      {scene === 'lobby' &&&& (
         <> 
-          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" /&gt;
-          &lt;pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" /&gt;
+          <pointLight position={[0, 10, 0]} intensity={2} color="#ff00ff" />
+          <pointLight position={[0, 10, 0]} intensity={2} color="#00ffff" />
         </>
       )}
-      &lt;Stars radius={80} depth={50} count={5000} factor={4} /&gt;
-      &lt;Roads /&gt;
-      &lt;mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}&gt;
-        &lt;planeGeometry args={[100, 100]} /&gt;
-        &lt;meshLambertMaterial color={worldData.groundColor} /&gt;
-      &lt;/mesh&gt;
-      {worldData.buildings.map((b, i) =&gt; (
-        &lt;Building key={i} position={b.pos} size={b.size} /&gt;
+      <Stars radius={80} depth={50} count={5000} factor={4} />
+      <Roads />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
+        <planeGeometry args={[100, 100]} />
+        <meshLambertMaterial color={worldData.groundColor} />
+      </mesh>
+      {worldData.buildings.map((b, i) => (
+        <Building key={i} position={b.pos} size={b.size} />
       ))}
-      {worldData.portals.map((p, i) =&gt; (
-        &lt;Portal key={i} position={p.pos} color={p.color} /&gt;
+      {worldData.portals.map((p, i) => (
+        <Portal key={i} position={p.pos} color={p.color} />
       ))}
-      {Object.entries(users).map(([uId, data]) =&gt;
-        uId !== uid &amp;&amp;&amp;&amp; data?.scene === scene &amp;&amp;&amp;&amp; data.pos &amp;&amp;&amp;&amp; (
-          &lt;Avatar
+      {Object.entries(users).map(([uId, data]) =>
+        uId !== uid &&&& data?.scene === scene &&&& data.pos &&&& (
+          <Avatar
             key={uId}
             position={[data.pos.x, data.pos.y || 0, data.pos.z]}
             color={hashColor(uId)}
-          /&gt;
+          />
         )
       )}
     </>
@@ -256,7 +256,7 @@ export default function App() {
   const [users, setUsers] = useState({});
   const [uid, setUid] = useState(null);
 
-  const updatePos = useCallback((newPos, newScene) =&gt; {
+  const updatePos = useCallback((newPos, newScene) => {
     if (uid) {
       set(ref(db, `users/${uid}`), {
         pos: newPos,
@@ -265,14 +265,14 @@ export default function App() {
     }
   }, [uid, scene]);
 
-  useEffect(() =&gt; {
+  useEffect(() => {
     signInAnonymously(auth).catch(console.error);
 
-    const unsubAuth = onAuthStateChanged(auth, (user) =&gt; {
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUid(user.uid);
         const usersRef = ref(db, 'users');
-        const unsubUsers = onValue(usersRef, (snap) =&gt; {
+        const unsubUsers = onValue(usersRef, (snap) => {
           setUsers(snap.val() || {});
         });
         // Cleanup on unmount
@@ -280,29 +280,29 @@ export default function App() {
       }
     });
 
-    const handlePointerLock = () =&gt; {
+    const handlePointerLock = () => {
       setLocked(!!document.pointerLockElement);
     };
     document.addEventListener('pointerlockchange', handlePointerLock);
-    return () =&gt; {
+    return () => {
       document.removeEventListener('pointerlockchange', handlePointerLock);
       unsubAuth();
     };
   }, []);
 
   return (
-    &lt;div style={{ position: 'fixed', inset: 0 }}&gt;
-      &lt;Canvas onClick={() =&gt; document.body.requestPointerLock()} camera={{ fov: 75, position: [0, 1.7, 0] }}&gt;
-        &lt;Scene
+    <div style={{ position: 'fixed', inset: 0 }}>
+      <Canvas onClick={() => document.body.requestPointerLock()} camera={{ fov: 75, position: [0, 1.7, 0] }}>
+        <Scene
           scene={scene}
           users={users}
           uid={uid}
           locked={locked}
           updatePos={updatePos}
           setScene={setScene}
-        /&gt;
-      &lt;/Canvas&gt;
-      &lt;div style={{
+        />
+      </Canvas>
+      <div style={{
         position: 'absolute',
         top: 20,
         left: 20,
@@ -313,25 +313,25 @@ export default function App() {
         borderRadius: '8px',
         pointerEvents: 'none',
         zIndex: 100,
-      }}&gt;
+      }}>
         {!locked ? (
           <> 
-            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;Click to Play&lt;/div&gt;
-            &lt;div&gt;WASD: Move&lt;/div&gt;
-            &lt;div&gt;Mouse: Look&lt;/div&gt;
-            &lt;div&gt;Portals: Enter Lobby&lt;/div&gt;
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>Click to Play</div>
+            <div>WASD: Move</div>
+            <div>Mouse: Look</div>
+            <div>Portals: Enter Lobby</div>
           </>
         ) : (
           <> 
-            &lt;div style={{ fontSize: '24px', marginBottom: '10px' }}&gt;
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>
               {scene.toUpperCase()}
-            &lt;/div&gt;
-            &lt;div&gt;ESC: Unlock&lt;/div&gt;
+            </div>
+            <div>ESC: Unlock</div>
           </>
         )}
-      &lt;/div&gt;
-      {uid &amp;&amp;&amp;&amp; (
-        &lt;div
+      </div>
+      {uid &&&& (
+        <div
           style={{
             position: 'absolute',
             bottom: 20,
@@ -342,11 +342,11 @@ export default function App() {
             borderRadius: '8px',
             zIndex: 100,
           }}
-        &gt;
-          &lt;Chat uid={uid} /&gt;
-        &lt;/div&gt;
+        >
+          <Chat uid={uid} />
+        </div>
       )}
-      &lt;div
+      <div
         style={{
           position: 'absolute',
           bottom: 20,
@@ -357,9 +357,9 @@ export default function App() {
           borderRadius: '8px',
           zIndex: 100,
         }}
-      &gt;
-        &lt;Studio isStudio={isStudio} setIsStudio={setIsStudio} /&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
+      >
+        <Studio isStudio={isStudio} setIsStudio={setIsStudio} />
+      </div>
+    </div>
   );
 }
